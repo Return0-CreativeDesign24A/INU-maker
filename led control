@@ -1,0 +1,54 @@
+#include <Adafruit_NeoPixel.h>
+
+#define PIN 0          // 데이터 핀이 연결된 디지털 핀
+#define NUMPIXELS 16 //24  // 네오픽셀 LED 개수
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  pixels.begin(); // 네오픽셀 초기화
+  randomSeed(PIN);
+  Serial.begin(9600);
+
+  for (int i = 0; i < NUMPIXELS; i++) {
+    int Red = random(255);
+    int Green = random(255);
+    int Blue = random(255);
+    pixels.setPixelColor(i, pixels.Color(Red, Green, Blue)); // RGB: 빨강
+    pixels.show(); // LED 갱신
+    delay(100); // 100ms 대기
+  }
+
+  delay(1000); // 전체 패턴 후 1초 대기
+
+  // 모든 픽셀 끄기
+  for (int i = 0; i < NUMPIXELS; i++) {
+    pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // 모든 색상을 0으로 설정
+    pixels.show(); // LED 갱신
+    delay(100);
+  }
+  delay(1000); // 전체 패턴 후 1초 대기
+}
+int cnt = 0;
+char Serial_Data;
+void loop() {
+  // 모든 픽셀을 빨간색으로 설정
+
+    for (int i = 0; i < NUMPIXELS; i++) {
+    int Red = random(255);
+    int Green = random(255);
+    int Blue = random(255);
+    pixels.setPixelColor(i, pixels.Color(Red, Green, Blue)); // RGB: 빨강
+    pixels.show(); // LED 갱신
+    delay(100); // 100ms 대기
+  }
+  while(Serial.available()>0){
+    Serial_Data = (char)Serial.read();
+  }
+  if(Serial_Data == '1'){
+    pixels.setPixelColor(cnt,pixels.Color(0,0,0));
+    pixels.show();
+    delay(100);
+    cnt = cnt+1;
+  }
+}
